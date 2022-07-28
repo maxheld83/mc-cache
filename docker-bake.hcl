@@ -4,9 +4,6 @@ target "foo" {
 
 target "bar" {
     dockerfile = "bar.Dockerfile"
-    contexts = {
-        foo = "target:foo"
-    }
     cache-from = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/bar/cache:latest"
     ]
