@@ -17,6 +17,9 @@ target "base" {
 
 target "app" {
     dockerfile = "app.Dockerfile"
+    contexts = {
+        base = "target:base"
+    }
     cache-from = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME}"
     ]
