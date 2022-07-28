@@ -23,6 +23,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
-      - name: "Build and Push Images"
+      - name: "Build and Push Base Images"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_SHA="${{ github.sha }}" TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake base
+      - name: "Build and Push App Images"
         run: |
           CAN_PUSH=true TAG_FROM_GIT_SHA="${{ github.sha }}" TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
