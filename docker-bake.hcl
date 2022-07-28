@@ -19,7 +19,8 @@ target "base" {
     inherits = ["default"]
     dockerfile = "base.Dockerfile"
     cache-from = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME}"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME}",
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:main"
     ]
     cache-to = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
@@ -37,7 +38,8 @@ target "app" {
         base = "target:base"
     }
     cache-from = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME}"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME}",
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:main"
     ]
     cache-to = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
