@@ -2,3 +2,4 @@
 
 FROM ubuntu:jammy
 RUN echo "zzz..."; sleep 100; echo "done"
+RUN touch foo.txt
