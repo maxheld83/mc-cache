@@ -24,4 +24,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
       - name: "Build and Push Images"
-        run: docker buildx bake app --push
+        run: |
+          TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app --push
