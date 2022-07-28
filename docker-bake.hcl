@@ -2,7 +2,18 @@ variable "TAG_FROM_GIT_REF_NAME" {
   default = "latest"
 }
 
+target "default" {
+  output = CAN_PUSH ? ["type=registry"] : ["type=docker"]
+}
+// only CI should push images and caches
+// you *could* push from a local machine in an emergency,
+// by setting this to "true" in the `docker buildx bake` command
+variable "CAN_PUSH" {
+  default = false
+}
+
 target "base" {
+    inherits = ["default"]
     dockerfile = "base.Dockerfile"
     cache-from = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME}"
@@ -16,6 +27,7 @@ target "base" {
 }
 
 target "app" {
+    inherits = ["default"]
     dockerfile = "app.Dockerfile"
     contexts = {
         base = "target:base"
