@@ -25,4 +25,4 @@ jobs:
           logout: false
       - name: "Build and Push Images"
         run: |
-          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+          CAN_PUSH=true TAG_FROM_GIT_SHA="${{ github.sha }}" TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
