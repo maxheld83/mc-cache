@@ -24,4 +24,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
       - name: "Build and Push Images"
-        run: docker buildx bake bar --push
+        run: docker buildx bake app --push
