@@ -2,5 +2,5 @@
 
 FROM base
 
-RUN echo "sleeping in app..."; sleep 10; echo "done"
+RUN echo "sleeping in app (child)..."; sleep 10; echo "done"
 RUN touch builder.txt
