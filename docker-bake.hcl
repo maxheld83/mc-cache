@@ -31,21 +31,49 @@ target "base" {
     ]
 }
 
-target "app" {
+group "app" {
+    targets = [
+        "runner",
+        "tester"
+    ]
+}
+
+target "runner" {
     inherits = ["default"]
     dockerfile = "app.Dockerfile"
+    target = "runner"
     contexts = {
         base = "target:base"
     }
     cache-from = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME}",
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:main"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/runner/cache:${TAG_FROM_GIT_REF_NAME}",
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/runner/cache:main"
     ]
     cache-to = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/runner/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
     ]
     tags = [
-        "ghcr.io/maxheld83/mc-cache/app:${TAG_FROM_GIT_REF_NAME}",
-        "ghcr.io/maxheld83/mc-cache/app:${TAG_FROM_GIT_SHA}",
+        "ghcr.io/maxheld83/mc-cache/runner:${TAG_FROM_GIT_REF_NAME}",
+        "ghcr.io/maxheld83/mc-cache/runner:${TAG_FROM_GIT_SHA}"
+    ]
+}
+
+target "tester" {
+    inherits = ["default"]
+    dockerfile = "app.Dockerfile"
+    target = "runner"
+    contexts = {
+        base = "target:base"
+    }
+    cache-from = [
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/tester/cache:${TAG_FROM_GIT_REF_NAME}",
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/tester/cache:main"
+    ]
+    cache-to = [
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/tester/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
+    ]
+    tags = [
+        "ghcr.io/maxheld83/mc-cache/tester:${TAG_FROM_GIT_REF_NAME}",
+        "ghcr.io/maxheld83/mc-cache/tester:${TAG_FROM_GIT_SHA}"
     ]
 }
