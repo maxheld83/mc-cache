@@ -17,6 +17,7 @@ variable "CAN_PUSH" {
 
 target "base" {
     inherits = ["default"]
+    context = "."
     dockerfile = "base.Dockerfile"
     target = "builder"
     cache-from = [
