@@ -23,6 +23,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
-      - name: "Build and Push Images"
+      - name: "Bake (no cache)"
         run: |
-          TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app --push
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake --no-cache app
+      - name: "Bake (with cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: "Change irrelevant file (not COPYed)"
+        run: touch baz.txt
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: "Change timestamp of COPYed file"
+        run: touch docker-bake.hcl
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: Checkout (again)
+        uses: actions/checkout@v3
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: Set up Docker Buildx (again)
+        uses: docker/setup-buildx-action@v2
+        with:
+          version: v0.8.2
+          install: true
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
