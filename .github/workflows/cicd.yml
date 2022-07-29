@@ -23,9 +23,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
-      - name: "Build and Push Base Images"
+      - name: "Bake (no cache)"
         run: |
-          CAN_PUSH=true TAG_FROM_GIT_SHA="${{ github.sha }}" TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake base
-      - name: "Build and Push App Images"
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake --no-cache app
+      - name: "Bake (with cache)"
         run: |
-          CAN_PUSH=true TAG_FROM_GIT_SHA="${{ github.sha }}" TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: "Change irrelevant file (not COPYed)"
+        run: touch baz.txt
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
