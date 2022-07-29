@@ -18,6 +18,7 @@ variable "CAN_PUSH" {
 target "base" {
     inherits = ["default"]
     dockerfile = "base.Dockerfile"
+    target = "builder"
     cache-from = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME}",
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:main"
