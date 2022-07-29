@@ -34,3 +34,8 @@ jobs:
       - name: "Bake (should still have cache)"
         run: |
           CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: "Change timestamp of COPYed file"
+        run: touch docker-bake.hcl
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
