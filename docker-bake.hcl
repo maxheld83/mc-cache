@@ -1,6 +1,3 @@
-variable "TAG_FROM_GIT_SHA" {
-  default = "latest"
-}
 variable "TAG_FROM_GIT_REF_NAME" {
   default = "latest"
 }
@@ -19,7 +16,6 @@ target "base" {
     inherits = ["default"]
     context = "."
     dockerfile = "base.Dockerfile"
-    target = "builder"
     cache-from = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME}",
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:main"
@@ -28,54 +24,24 @@ target "base" {
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
     ]
     tags = [
-        "ghcr.io/maxheld83/mc-cache/base:${TAG_FROM_GIT_REF_NAME}",
-        "ghcr.io/maxheld83/mc-cache/base:${TAG_FROM_GIT_SHA}",
+        "ghcr.io/maxheld83/mc-cache/base:${TAG_FROM_GIT_REF_NAME}"
     ]
 }
 
-group "app" {
-    targets = [
-        "runner",
-        "tester"
-    ]
-}
-
-target "runner" {
+target "app" {
     inherits = ["default"]
     dockerfile = "app.Dockerfile"
-    target = "runner"
     contexts = {
         base = "target:base"
     }
     cache-from = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/runner/cache:${TAG_FROM_GIT_REF_NAME}",
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/runner/cache:main"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME}",
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:main"
     ]
     cache-to = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/runner/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
     ]
     tags = [
-        "ghcr.io/maxheld83/mc-cache/runner:${TAG_FROM_GIT_REF_NAME}",
-        "ghcr.io/maxheld83/mc-cache/runner:${TAG_FROM_GIT_SHA}"
-    ]
-}
-
-target "tester" {
-    inherits = ["default"]
-    dockerfile = "app.Dockerfile"
-    target = "runner"
-    contexts = {
-        base = "target:base"
-    }
-    cache-from = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/tester/cache:${TAG_FROM_GIT_REF_NAME}",
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/tester/cache:main"
-    ]
-    cache-to = [
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/tester/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
-    ]
-    tags = [
-        "ghcr.io/maxheld83/mc-cache/tester:${TAG_FROM_GIT_REF_NAME}",
-        "ghcr.io/maxheld83/mc-cache/tester:${TAG_FROM_GIT_SHA}"
+        "ghcr.io/maxheld83/mc-cache/app:${TAG_FROM_GIT_REF_NAME}"
     ]
 }
