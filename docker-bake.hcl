@@ -39,7 +39,7 @@ target "app" {
     }
     cache-from = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME}",
-        "type=registry,ref=ghcr.io/maxheld83/mc-cache/base/cache:main"
+        "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:main"
     ]
     cache-to = [
         "type=registry,ref=ghcr.io/maxheld83/mc-cache/app/cache:${TAG_FROM_GIT_REF_NAME},mode=max"
