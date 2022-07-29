@@ -39,3 +39,8 @@ jobs:
       - name: "Bake (should still have cache)"
         run: |
           CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
+      - name: Checkout (again)
+        uses: actions/checkout@v3
+      - name: "Bake (should still have cache)"
+        run: |
+          CAN_PUSH=true TAG_FROM_GIT_REF_NAME="${{ github.ref_name }}" docker buildx bake app
